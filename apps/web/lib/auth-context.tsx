@@ -8,9 +8,8 @@ interface AuthContextType {
   user: User | null;
   isLoading: boolean;
   isAuthenticated: boolean;
-  signIn: (email: string, password: string) => Promise<void>;
-  signOut: () => Promise<void>;
-  signUp: (email: string, password: string, name: string) => Promise<void>;
+   signOut: () => Promise<void>;
+
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -29,59 +28,25 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         setIsLoading(false);
       }
     };
-
     checkAuth();
   }, []);
 
-  const handleSignIn = async (email: string, password: string) => {
-    try {
-      const result = await signIn('credentials', {
-        email,
-        password,
-        redirect: false,
-      });
 
-      if (result?.error) {
-        throw new Error(result.error);
-      }
-    } catch (error) {
-      throw error;
-    }
-  };
-
-  const handleSignUp = async (email: string, password: string, name: string) => {
-    try {
-      const response = await fetch('/api/auth/signup', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ email, password, name }),
-      });
-
-      if (!response.ok) {
-        const error = await response.json();
-        throw new Error(error.message || 'Sign up failed');
-      }
-
-      // Auto sign in after successful sign up
-      await handleSignIn(email, password);
-    } catch (error) {
-      throw error;
-    }
-  };
 
   const handleSignOut = async () => {
     await signOut({ redirect: false });
   };
 
+  // The error was likely occurring because `session?.user` can be undefined or not match the expected `User` type,
+  // especially if the session is not yet loaded or if the user object is missing required properties.
+  // By checking for the presence of a key property (like 'id') before casting to User,
+  // we ensure type safety and prevent runtime errors when accessing user properties.
+
   const value: AuthContextType = {
-    user: session?.user || null,
+    user: session?.user && 'id' in session.user ? session.user as User : null,
     isLoading: status === 'loading' || isLoading,
-    isAuthenticated: !!session?.user,
-    signIn: handleSignIn,
-    signOut: handleSignOut,
-    signUp: handleSignUp,
+    isAuthenticated: !!(session?.user && 'id' in session.user),
+    signOut: handleSignOut
   };
 
   return (

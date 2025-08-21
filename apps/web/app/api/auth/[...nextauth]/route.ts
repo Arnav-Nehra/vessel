@@ -13,6 +13,7 @@ export const authOptions : NextAuthOptions = {
     }),
   ],
   session:{strategy:"jwt"},
+
   callbacks: {
     async jwt({ token, account, user }) {
         // Persist the OAuth access_token to the token right after signin
@@ -23,6 +24,9 @@ export const authOptions : NextAuthOptions = {
         }
         console.log(token);
         return token;
+    },
+    async redirect(){
+      return `http://localhost:3000`
     },
     async session({ session, token }) {
         // Send properties to the client
