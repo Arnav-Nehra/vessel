@@ -1,11 +1,11 @@
 'use client';
 
 import { createContext, useContext, useEffect, useState } from 'react';
-import { useSession, signIn, signOut, getSession } from 'next-auth/react';
-import { User } from 'next-auth';
+import { useSession, signOut, getSession } from 'next-auth/react';
+import type { Session } from 'next-auth';
 
 interface AuthContextType {
-  user: User | null;
+  user: Session['user'] | null;
   isLoading: boolean;
   isAuthenticated: boolean;
    signOut: () => Promise<void>;
@@ -43,10 +43,10 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   // we ensure type safety and prevent runtime errors when accessing user properties.
 
   const value: AuthContextType = {
-    user: session?.user && 'id' in session.user ? session.user as User : null,
+    user: session?.user ?? null,
     isLoading: status === 'loading' || isLoading,
-    isAuthenticated: !!(session?.user && 'id' in session.user),
-    signOut: handleSignOut
+    isAuthenticated: Boolean(session?.user),
+    signOut: handleSignOut,
   };
 
   return (

@@ -1,0 +1,52 @@
+<svg 
+  xmlns="http://www.w3.org/2000/svg" 
+  viewBox="0 0 300 400" 
+  width="300" 
+  height="400"
+>
+  <defs>
+    <!-- Neon glow filter -->
+    <filter id="glow">
+      <feGaussianBlur stdDeviation="3.5" result="blur" />
+      <feMerge>
+        <feMergeNode in="blur" />
+        <feMergeNode in="SourceGraphic" />
+      </feMerge>
+    </filter>
+  </defs>
+
+  <!-- Vase -->
+  <path
+    d="M110 18 
+       Q150 10 190 18 
+       Q182 35 174 52 
+       Q166 70 164 90 
+       Q160 125 178 165 
+       Q192 195 212 230 
+       Q232 268 212 305 
+       Q195 337 165 358 
+       Q150 369 150 385 
+       Q150 369 135 358 
+       Q105 337 88 305 
+       Q68 268 88 230 
+       Q108 195 122 165 
+       Q140 125 136 90 
+       Q134 70 126 52 
+       Q118 35 110 18 Z"
+    fill="none"
+    stroke="#a020f0"
+    stroke-width="2.5"
+    filter="url(#glow)"
+  />
+
+  <!-- Cap -->
+  <path
+    d="M112 18 
+       Q150 2 188 18
+       Q150 -10 112 18 Z"
+    fill="none"
+    stroke="#a020f0"
+    stroke-width="2.5"
+    filter="url(#glow)"
+  />
+</svg>

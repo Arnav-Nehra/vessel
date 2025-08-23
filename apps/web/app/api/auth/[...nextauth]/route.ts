@@ -22,7 +22,7 @@ export const authOptions : NextAuthOptions = {
             token.refreshToken = account.refresh_token;
             token.expiresAt = account.expires_at;
         }
-        console.log(token);
+      
         return token;
     },
     async redirect(){
